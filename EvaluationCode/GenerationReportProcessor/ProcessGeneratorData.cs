@@ -8,10 +8,16 @@ internal class ProcessGeneratorData
 {
     // Retrieve the path to the folder where input files will be monitored.
     static string inboundFolderPath = AppConfig.GetAppSettings("InputFolder");
+
     // Retrieve the path to the folder where output files will be stored.
     static string outboundFolderPath = AppConfig.GetAppSettings("OutputFolder");
+
     // Retrieve the path to the reference data file that contains static data used for processing.
     static string referenceDataFile = AppConfig.GetAppSettings("ReferenceData");
+
+    /// <summary>
+    /// Entry point for the application. Initializes the application, processes existing files, and monitors an inbound folder for new XML files to process.
+    /// </summary>
     private static void Main(string[] args)
     {
         try
@@ -63,6 +69,12 @@ internal class ProcessGeneratorData
             Console.WriteLine($"Error in initialising application: {ex.Message}");
         }
     }
+
+    /// <summary>
+    /// Processes the input XML file, generates an output XML file, and saves it to the specified outbound folder.
+    /// </summary>
+    /// <param name="filePath">The file path of the input XML file to be processed.</param>
+    /// <param name="referenceData">An XDocument containing reference data required for processing.</param>
     private static void ProcessFile(string filePath, XDocument referenceData)
     {
         try
@@ -91,6 +103,12 @@ internal class ProcessGeneratorData
         }
 
     }
+
+    /// <summary>
+    /// Processes all existing files in the specified input folder using the provided reference data.
+    /// </summary>
+    /// <param name="inputFolder">The path to the folder containing the files to be processed.</param>
+    /// <param name="referenceData">An XDocument containing reference data required for processing.</param>
     private static void ProcessExistingFiles(string inputFolder, XDocument referenceData)
     {
         try

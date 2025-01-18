@@ -14,7 +14,11 @@ namespace GenerationReportProcessor
         // Dictionary to store emission factors, where the key is the factor name and the value is the factor value
         private readonly Dictionary<string, double> EmissionFactors;
 
-        // Constructor to initialize the ReportProcessor with reference data in XML format
+        /// <summary>
+        /// Initializes a new instance of the ReportProcessor class using the provided reference data.
+        /// </summary>
+        /// <param name="referenceData">An XDocument containing reference data, including value and emission factors.</param>
+        /// <remarks>
         public ReportProcessor(XDocument referenceData)
         {
             // Extract the ValueFactors from the "ValueFactor" element in the XML
@@ -31,6 +35,14 @@ namespace GenerationReportProcessor
                 .Elements()
                 .ToDictionary(x => x.Name.LocalName, x => (double)x);
         }
+
+        /// <summary>
+        /// Processes the input XML document to calculate and generate various metrics for different types of generators, including total generation, daily emissions, and heat rates.
+        /// </summary>
+        /// <param name="inputDoc">The input XML document containing data for different generators (Wind, Gas, and Coal).</param>
+        /// <returns>
+        /// An XDocument containing the processed output data, including totals, daily emissions, and actual heat rates.
+        /// </returns>
         public XDocument Process(XDocument inputDoc)
         {
             try
@@ -83,6 +95,12 @@ namespace GenerationReportProcessor
             }
 
         }
+
+        /// <summary>
+        /// Processes the data for a single wind generator, calculating the total generation based on daily energy, price, and location-based value factor.
+        /// </summary>
+        /// <param name="generator">An XElement representing the wind generator data.</param>
+        /// <param name="totals">A list to store the total generation for each generator, including the calculated value for this wind generator.</param>
         private void ProcessWindGenerator(XElement generator, List<GeneratorTotal> totals)
         {
             try
@@ -110,6 +128,13 @@ namespace GenerationReportProcessor
             }
         }
 
+        /// <summary>
+        /// Processes the data for a single fuel generator, calculating the total generation and daily emissions based on energy, price, and emission factors.
+        /// </summary>
+        /// <param name="generator">An XElement representing the fuel generator data.</param>
+        /// <param name="emissionFactorKey">A key representing the emission factor (e.g., "Medium" or "High") for the generator.</param>
+        /// <param name="totals">A list to store the total generation for each generator, including the calculated value for this fuel generator.</param>
+        /// <param name="dailyEmissions">A list to store the daily emissions for each generator, calculated for each day.</param>
         private void ProcessFuelGenerator(XElement generator, string emissionFactorKey, List<GeneratorTotal> totals, List<DailyEmission> dailyEmissions)
         {
             try
@@ -155,6 +180,13 @@ namespace GenerationReportProcessor
             }
         }
 
+        /// <summary>
+        /// Generates an XML document containing the summary of generator totals, maximum daily emissions, and actual heat rates.
+        /// </summary>
+        /// <param name="totals">A list of <see cref="GeneratorTotal"/> objects representing the total generation for each generator.</param>
+        /// <param name="dailyEmissions">A list of <see cref="DailyEmission"/> objects representing the daily emissions for each generator.</param>
+        /// <param name="actualHeatRates">A list of <see cref="ActualHeatRate"/> objects representing the calculated heat rates for each generator.</param>
+        /// <returns>A new XDocument containing the structured XML with generator totals, emissions, and heat rates.</returns>
         private XDocument GenerateOutputXml(List<GeneratorTotal> totals, List<DailyEmission> dailyEmissions, List<ActualHeatRate> actualHeatRates)
         {
             try

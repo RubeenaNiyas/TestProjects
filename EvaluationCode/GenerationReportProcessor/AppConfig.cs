@@ -9,7 +9,13 @@ namespace GenerationReportProcessor
 {
     public class AppConfig
     {
-        // Getting configuration values from appsettings
+        /// <summary>
+        /// Retrieves the value of a specified key from the AppSettings section of the configuration file.
+        /// </summary>
+        /// <param name="key">The key of the setting to retrieve from the AppSettings section.</param>
+        /// <returns>
+        /// The value associated with the specified key if it exists in the AppSettings section.
+        /// </returns>
         public static string GetAppSettings(string key)
         {
             // Check if the specified key exists in the AppSettings section of the configuration file.
